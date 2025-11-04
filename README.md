@@ -12,7 +12,6 @@ Infrastructure repository for the Time Tracking diploma project. The repo follow
 ## Prerequisites
 
 - Docker (tested with Docker Desktop or Colima
-- )
 - `kubectl`, `helm`, `kind`, and `argocd` CLI tools installed locally
 - Clone of this repository and access to the Git remote Argo CD will watch
 
@@ -28,7 +27,8 @@ Infrastructure repository for the Time Tracking diploma project. The repo follow
    helm repo add argo https://argoproj.github.io/argo-helm
    helm repo update
    helm upgrade --install argocd argo/argo-cd \
-     --namespace argocd
+     --namespace argocd \
+     --set applicationset.enabled=true
    ```
 3. **Allow Argo CD to serve HTTP behind the ingress**
    ```bash
@@ -50,11 +50,14 @@ Infrastructure repository for the Time Tracking diploma project. The repo follow
      --password $(kubectl get secret argocd-initial-admin-secret -n argocd -o jsonpath='{.data.password}' | base64 --decode)
    ```
    You can now open `http://argocd.localtest.me` in a browser and sign in with the same credentials.
-6. **Register the Git repository in Argo CD**  
-   Update the repo URL below with your Git remote (HTTP(S) or SSH):
-   ```bash
-   argocd repo add https://github.com/savevskii/time-tracking-deployment.git
-   ```
+   6. **Register the Git repository in Argo CD**  
+      Update the repo URL below with your Git remote (HTTP(S) or SSH):
+      ```bash
+      argocd repo add https://github.com/savevskii/time-tracking-deployment.git \
+       --username savevskii \
+       --password <your-github-token> \
+       --name time-tracking-app-repo
+      ```
 6. **Apply GitOps manifests**
    ```bash
    kubectl apply -f deploy/argocd/dev/appprojects/platform.yaml

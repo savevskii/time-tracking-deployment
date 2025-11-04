@@ -11,7 +11,7 @@ spec:
         repoURL: https://github.com/savevskii/time-tracking-deployment.git
         revision: main
         directories:
-          - path: deploy/argocd/dev/applications/*
+          - path: deploy/argocd/dev/*
   template:
     metadata:
       namespace: argocd
