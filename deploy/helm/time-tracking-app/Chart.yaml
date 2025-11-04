@@ -1,0 +1,13 @@
+apiVersion: v2
+name: time-tracking-app-backend
+description: A Helm chart for deploying the Time Tracking Application backend
+type: application
+version: 0.1.0
+appVersion: "1.0.0"
+dependencies:
+  - name: keycloak
+    version: 25.2.10
+    repository: "oci://docker-registry-internal-release.extranet.netcetera.biz/bitnami-secure-images/charts/debian-12"
+  - name: postgresql
+    version: 18.1.4
+    repository: "oci://docker-registry-internal-release.extranet.netcetera.biz/bitnami-secure-images/charts/debian-12"

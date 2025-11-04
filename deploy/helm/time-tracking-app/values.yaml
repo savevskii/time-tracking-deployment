@@ -1,0 +1,114 @@
+nameOverride: ""
+fullnameOverride: ""
+
+serviceAccount:
+  create: false
+  name: ""
+  automountServiceAccountToken: false
+
+deployment:
+  replicaCount: 1
+  image:
+    repository: "ghcr.io/savevskii/time-tracking-app"
+    tag: "main"
+    pullPolicy: IfNotPresent
+  resources:
+    requests:
+      cpu: "250m"
+      memory: "512Mi"
+    limits:
+      memory: "1Gi"
+  envFrom: []
+  env: []
+
+service:
+  type: ClusterIP
+  port: 8080
+
+ingress:
+  enabled: false
+
+egress:
+  enabled: false
+
+# Subchart defaults
+postgresql:
+  enabled: true
+  auth:
+    enablePostgresUser: true
+    postgresPassword: "postgres_admin_password"
+    username: "timetracking_user"
+    password: "timetracking123"
+    database: "timetracking"
+  primary:
+    resources:
+      requests:
+        cpu: 500m
+        memory: 1Gi
+      limits:
+        cpu: 500m
+        memory: 1Gi
+    persistence:
+      enabled: false
+    initdb:
+      user: "postgres"
+      password: "postgres_admin_password"
+      scripts:
+        00_enable-extensions.sql: |
+          CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
+          CREATE EXTENSION IF NOT EXISTS "pgcrypto";
+        01_create_keycloak_db.sql: |
+          -- Create dedicated user for Keycloak
+          CREATE USER keycloak_user WITH PASSWORD 'keycloak123';
+          
+          -- Create Keycloak database owned by that user
+          CREATE DATABASE keycloak OWNER keycloak_user;
+          
+          -- Optional: make sure privileges are explicit
+          GRANT ALL PRIVILEGES ON DATABASE keycloak TO keycloak_user;
+  readReplicas:
+    replicaCount: 0
+  metrics:
+    enabled: false
+
+keycloak:
+  enabled: true
+  auth:
+    adminUser: admin
+    adminPassword: topsecret
+  service:
+    type: ClusterIP
+  ingress:
+    enabled: true
+    ingressClassName: nginx
+    hostname: keycloak.localtest.me
+    tls: false
+  resources:
+    requests:
+      cpu: 250m
+      memory: 1Gi
+    limits:
+      cpu: 1
+      memory: 1Gi
+  httpRelativePath: "/"
+  postgresql:
+    enabled: false
+  externalDatabase:
+    host: '{{ printf "%s-postgresql.%s.svc.cluster.local" .Release.Name .Release.Namespace }}'
+    port: 5432
+    user: keycloak_user
+    password: keycloak123
+    database: keycloak
+    schema: public
+  extraEnvVars:
+    - name: KEYCLOAK_EXTRA_ARGS
+      value: "--import-realm"
+  extraVolumes:
+    - name: dev-realm
+      configMap:
+        name: keycloak-realm
+  extraVolumeMounts:
+    - name: dev-realm
+      mountPath: /opt/bitnami/keycloak/data/import
+      readOnly: true
+

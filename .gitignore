@@ -1,0 +1,40 @@
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# Editor directories and files
+.idea/
+.vscode/
+*.iml
+*.ipr
+*.iws
+
+# Node / frontend
+node_modules/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Environment files
+.env
+.env.*
+*.local
+
+# Helm
+**/charts/*.tgz
+**/tmp/
+**/.helm-dependency/
+
+.idea/
+lib/
+*.tgz
+Chart.lock
+
+# Kubernetes tooling
+**/manifests/*.generated.yaml
+
+# Misc
+*.swp
+*.swo

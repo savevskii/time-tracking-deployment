@@ -1,0 +1,39 @@
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  namespace: argocd
+  name: bootstrap
+spec:
+  syncPolicy:
+    preserveResourcesOnDeletion: true
+  generators:
+    - git:
+        repoURL: https://github.com/savevskii/time-tracking-deployment.git
+        revision: main
+        directories:
+          - path: deploy/argocd/dev/applications/*
+  template:
+    metadata:
+      namespace: argocd
+      name: "bootstrap-{{path.basename}}"
+    spec:
+      project: default
+      source:
+        repoURL: https://github.com/savevskii/time-tracking-deployment.git
+        targetRevision: main
+        path: "{{path}}"
+      destination:
+        server: https://kubernetes.default.svc
+        namespace: argocd
+      syncPolicy:
+        automated:
+          selfHeal: true
+          prune: true
+          allowEmpty: true
+        syncOptions:
+          - Validate=true
+          - CreateNamespace=false
+          - PrunePropagationPolicy=foreground
+          - PruneLast=true
+          - FailOnSharedResource=true
+          - RespectIgnoreDifferences=true

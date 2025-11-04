@@ -1,0 +1,28 @@
+deployment:
+  replicaCount: 1
+  env:
+    - name: SPRING_DATASOURCE_URL
+      value: "jdbc:postgresql://time-tracking-postgresql.time-tracking-dev.svc.cluster.local:5432/timetracking"
+    - name: SPRING_DATASOURCE_USERNAME
+      value: "timetracking_user"
+    - name: SPRING_DATASOURCE_PASSWORD
+      value: "timetracking123"
+    - name: SPRING_SECURITY_OAUTH2_RESOURCESERVER_JWT_ISSUER_URI
+      value: "http://keycloak.localtest.me/realms/dev"
+
+ingress:
+  enabled: true
+  className: "nginx"
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /
+  hosts:
+    - host: time-tracking.localtest.me
+      paths:
+        - path: /
+          pathType: Prefix
+  tls: []
+
+keycloak:
+  externalDatabase:
+    host: time-tracking-postgresql.time-tracking-dev.svc.cluster.local
+    port: 5432

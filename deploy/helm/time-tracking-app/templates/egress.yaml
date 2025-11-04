@@ -1,0 +1,24 @@
+{{- if .Values.egress.enabled }}
+apiVersion: cilium.io/v2
+kind: CiliumNetworkPolicy
+metadata:
+  name: {{ include "time-tracking-app.fullname" . }}
+spec:
+  endpointSelector:
+    matchLabels:
+      {{- include "time-tracking-app.selectorLabels" . | nindent 4 }}
+  egress:
+    - toFQDNs:
+      {{- range .Values.egress.matchName }}
+        - matchName: {{ . | quote }}
+      {{- end}}
+      {{- range .Values.egress.matchPattern }}
+        - matchPattern: {{ . | quote }}
+      {{- end}}
+    - toPorts:
+        - ports:
+        {{- range .Values.egress.ports }}
+            - port: {{ . | quote }}
+              protocol: TCP
+        {{- end}}
+{{- end }}

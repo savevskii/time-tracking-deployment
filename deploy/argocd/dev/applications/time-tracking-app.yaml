@@ -1,0 +1,25 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: time-tracking
+  namespace: argocd
+  labels:
+    app.kubernetes.io/managed-by: argocd
+spec:
+  project: platform
+  source:
+    repoURL: https://github.com/savevskii/time-tracking-deployment.git
+    targetRevision: main
+    path: deploy/helm/time-tracking-app
+    helm:
+      valueFiles:
+        - ../../../envs/dev/time-tracking-app/values.yaml
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: time-tracking-dev
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
