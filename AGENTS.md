@@ -28,3 +28,14 @@
 - Post-deploy smoke tests deferred for now; revisit when CD automation matures.
 - CI publishes the backend executable jar as an artifact so downstream Docker jobs can consume it without rebuilding.
 - AI agent integration points to be defined later once baseline pipelines are stable.
+
+## Repository Structure
+- `deploy/helm/` — Helm charts (e.g., `time-tracking-app` bundling backend, PostgreSQL, Keycloak).
+- `deploy/envs/<env>/<component>/values.yaml` — Environment-specific overrides consumed by Argo CD Applications.
+- `deploy/argocd/` — AppProjects, Applications, and ApplicationSets driving GitOps sync (ApplicationSet for `time-tracking`).
+- `deploy/infra/` — Ancillary cluster assets such as kind cluster config and the Argo CD ingress manifest.
+
+## Argo CD Notes
+- The chart installs Argo CD via Helm with the ApplicationSet controller enabled.
+- After install, patch `argocd-cmd-params-cm` to set `server.insecure=true`; ingress exposes HTTP at `argocd.localtest.me` via NGINX.
+- Default admin password lives in `argocd-initial-admin-secret`; CLI login uses `argocd login argocd.localtest.me --grpc-web --plaintext ...`.
