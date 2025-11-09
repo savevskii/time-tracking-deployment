@@ -11,19 +11,53 @@ metadata:
   {{- end }}
 spec:
   ingressClassName: {{ .Values.ingress.className | default "nginx" }}
+  {{- $root := . }}
+  {{- $backendServiceName := include "time-tracking-app.fullname" . }}
+  {{- $frontendServiceName := printf "%s-frontend" $backendServiceName }}
   rules:
     {{- range .Values.ingress.hosts }}
     - host: {{ .host }}
       http:
         paths:
           {{- range .paths }}
+          {{- $path := . }}
+          {{- $service := $path.service }}
+          {{- $serviceNameKey := "backend" }}
+          {{- $servicePort := "" }}
+          {{- $servicePortName := "" }}
+          {{- if $service }}
+            {{- if $service.name }}
+              {{- $serviceNameKey = $service.name }}
+            {{- end }}
+            {{- if hasKey $service "port" }}
+              {{- $servicePort = $service.port }}
+            {{- end }}
+            {{- if $service.portName }}
+              {{- $servicePortName = $service.portName }}
+            {{- end }}
+          {{- end }}
+          {{- $resolvedServiceName := "" }}
+          {{- if eq $serviceNameKey "backend" }}
+            {{- $resolvedServiceName = $backendServiceName }}
+            {{- $servicePort = default $root.Values.service.port $servicePort }}
+          {{- else if eq $serviceNameKey "frontend" }}
+            {{- $resolvedServiceName = $frontendServiceName }}
+            {{- $servicePort = default $root.Values.frontend.service.port $servicePort }}
+          {{- else }}
+            {{- $resolvedServiceName = $serviceNameKey }}
+          {{- end }}
           - path: {{ .path }}
             pathType: {{ .pathType }}
             backend:
               service:
-                name: {{ include "time-tracking-app.fullname" $ }}
+                name: {{ $resolvedServiceName }}
+                {{- if $servicePortName }}
                 port:
-                  number: {{ $.Values.service.port }}
+                  name: {{ $servicePortName }}
+                {{- else }}
+                port:
+                  number: {{ $servicePort }}
+                {{- end }}
           {{- end }}
     {{- end }}
   {{- if .Values.ingress.tls }}

@@ -4,6 +4,7 @@ metadata:
   name: {{ include "time-tracking-app.fullname" . }}
   labels:
     {{- include "time-tracking-app.labels" . | nindent 4 }}
+    app.kubernetes.io/component: backend
 spec:
   replicas: {{ .Values.deployment.replicaCount }}
   strategy:
@@ -14,10 +15,12 @@ spec:
   selector:
     matchLabels:
       {{- include "time-tracking-app.selectorLabels" . | nindent 6 }}
+      app.kubernetes.io/component: backend
   template:
     metadata:
       labels:
         {{- include "time-tracking-app.selectorLabels" . | nindent 8 }}
+        app.kubernetes.io/component: backend
     spec:
       serviceAccountName: {{ include "time-tracking-app.serviceAccountName" . }}
       automountServiceAccountToken: {{ .Values.serviceAccount.automountServiceAccountToken }}

@@ -25,6 +25,26 @@ service:
   type: ClusterIP
   port: 8080
 
+frontend:
+  enabled: true
+  replicaCount: 1
+  image:
+    repository: "ghcr.io/savevskii/time-tracking-app-ui"
+    tag: "latest"
+    pullPolicy: IfNotPresent
+  containerPort: 80
+  envFrom: []
+  env: []
+  resources:
+    requests:
+      cpu: "100m"
+      memory: "128Mi"
+    limits:
+      memory: "256Mi"
+  service:
+    type: ClusterIP
+    port: 80
+
 ingress:
   enabled: false
 
@@ -111,4 +131,3 @@ keycloak:
     - name: dev-realm
       mountPath: /opt/bitnami/keycloak/data/import
       readOnly: true
-

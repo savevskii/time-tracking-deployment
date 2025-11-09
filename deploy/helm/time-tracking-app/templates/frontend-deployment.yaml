@@ -1,0 +1,40 @@
+{{- if .Values.frontend.enabled }}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "time-tracking-app.fullname" . }}-frontend
+  labels:
+    {{- include "time-tracking-app.labels" . | nindent 4 }}
+    app.kubernetes.io/component: frontend
+spec:
+  replicas: {{ .Values.frontend.replicaCount }}
+  selector:
+    matchLabels:
+      {{- include "time-tracking-app.selectorLabels" . | nindent 6 }}
+      app.kubernetes.io/component: frontend
+  template:
+    metadata:
+      labels:
+        {{- include "time-tracking-app.selectorLabels" . | nindent 8 }}
+        app.kubernetes.io/component: frontend
+    spec:
+      containers:
+        - name: frontend
+          image: "{{ .Values.frontend.image.repository }}:{{ .Values.frontend.image.tag }}"
+          imagePullPolicy: {{ .Values.frontend.image.pullPolicy }}
+          ports:
+            - name: http
+              containerPort: {{ .Values.frontend.containerPort }}
+          {{- if .Values.frontend.envFrom }}
+          envFrom:
+          {{- toYaml .Values.frontend.envFrom | nindent 12 }}
+          {{- end }}
+          {{- if .Values.frontend.env }}
+          env:
+          {{- toYaml .Values.frontend.env | nindent 12 }}
+          {{- end }}
+          {{- if .Values.frontend.resources }}
+          resources:
+            {{- toYaml .Values.frontend.resources | nindent 12 }}
+          {{- end }}
+{{- end }}

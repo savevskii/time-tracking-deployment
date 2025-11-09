@@ -10,16 +10,26 @@ deployment:
     - name: SPRING_SECURITY_OAUTH2_RESOURCESERVER_JWT_ISSUER_URI
       value: "http://keycloak.localtest.me/realms/dev"
 
+frontend:
+  KEYCLOAK_URL: "http://keycloak.localtest.me/"
+  KEYCLOAK_REALM: "dev"
+  KEYCLOAK_CLIENT_ID: "time-tracking-app"
+  API_BASE_URL: "http://time-tracking.localtest.me/"
+
 ingress:
   enabled: true
   className: "nginx"
-  annotations:
-    nginx.ingress.kubernetes.io/rewrite-target: /
   hosts:
     - host: time-tracking.localtest.me
       paths:
         - path: /
           pathType: Prefix
+          service:
+            name: frontend
+        - path: /api
+          pathType: Prefix
+          service:
+            name: backend
   tls: []
 
 keycloak:
