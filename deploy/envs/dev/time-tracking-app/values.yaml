@@ -41,6 +41,12 @@ ingress:
       secretName: time-tracking-local-tls
 
 keycloak:
+  ingress:
+    tls: true
+    extraTls:
+      - hosts:
+          - keycloak.localtest.me
+        secretName: keycloak-local-tls
   externalDatabase:
     host: time-tracking-postgresql.time-tracking-dev.svc.cluster.local
     port: 5432
