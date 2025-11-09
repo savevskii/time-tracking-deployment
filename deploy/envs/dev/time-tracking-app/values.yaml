@@ -8,7 +8,9 @@ deployment:
     - name: SPRING_DATASOURCE_PASSWORD
       value: "timetracking123"
     - name: SPRING_SECURITY_OAUTH2_RESOURCESERVER_JWT_ISSUER_URI
-      value: "http://time-tracking-keycloak.time-tracking-dev.svc.cluster.local/realms/dev"
+      value: "https://keycloak.localtest.me/realms/dev"
+    - name: SPRING_SECURITY_OAUTH2_RESOURCESERVER_JWT_JWK_SET_URI
+      value: "http://time-tracking-keycloak.time-tracking-dev.svc.cluster.local/realms/dev/protocol/openid-connect/certs"
 
 frontend:
   env:
