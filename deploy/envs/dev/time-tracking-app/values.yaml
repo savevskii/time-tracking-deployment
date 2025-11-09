@@ -11,10 +11,11 @@ deployment:
       value: "http://keycloak.localtest.me/realms/dev"
 
 frontend:
-  KEYCLOAK_URL: "http://keycloak.localtest.me/"
-  KEYCLOAK_REALM: "dev"
-  KEYCLOAK_CLIENT_ID: "time-tracking-app"
-  API_BASE_URL: "http://time-tracking.localtest.me/"
+  env:
+    KEYCLOAK_URL: "http://keycloak.localtest.me/"
+    KEYCLOAK_REALM: "dev"
+    KEYCLOAK_CLIENT_ID: "time-tracking-app"
+    API_BASE_URL: "http://time-tracking.localtest.me/"
 
 ingress:
   enabled: true
