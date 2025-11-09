@@ -35,7 +35,10 @@ ingress:
           pathType: Prefix
           service:
             name: backend
-  tls: []
+  tls:
+    - hosts:
+        - time-tracking.localtest.me
+      secretName: time-tracking-local-tls
 
 keycloak:
   externalDatabase:
