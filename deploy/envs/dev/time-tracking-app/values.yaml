@@ -8,18 +8,18 @@ deployment:
     - name: SPRING_DATASOURCE_PASSWORD
       value: "timetracking123"
     - name: SPRING_SECURITY_OAUTH2_RESOURCESERVER_JWT_ISSUER_URI
-      value: "http://keycloak.localtest.me/realms/dev"
+      value: "https://keycloak.localtest.me/realms/dev"
 
 frontend:
   env:
     - name: KEYCLOAK_URL
-      value: "http://keycloak.localtest.me/"
+      value: "https://keycloak.localtest.me/"
     - name: KEYCLOAK_REALM
       value: "dev"
     - name: KEYCLOAK_CLIENT_ID
       value: "time-tracking-app"
     - name: API_BASE_URL
-      value: "http://time-tracking.localtest.me/"
+      value: "https://time-tracking.localtest.me/"
 
 ingress:
   enabled: true
