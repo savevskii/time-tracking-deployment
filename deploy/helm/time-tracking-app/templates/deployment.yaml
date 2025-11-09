@@ -15,7 +15,6 @@ spec:
   selector:
     matchLabels:
       {{- include "time-tracking-app.selectorLabels" . | nindent 6 }}
-      app.kubernetes.io/component: backend
   template:
     metadata:
       labels:
