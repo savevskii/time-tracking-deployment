@@ -6,7 +6,7 @@ metadata:
     {{- include "time-tracking-app.labels" . | nindent 4 }}
     app.kubernetes.io/component: backend
 spec:
-  replicas: {{ .Values.deployment.replicaCount }}
+  replicas: {{ .Values.backend.deployment.replicaCount }}
   strategy:
     type: RollingUpdate
     rollingUpdate:
@@ -23,6 +23,10 @@ spec:
     spec:
       serviceAccountName: {{ include "time-tracking-app.serviceAccountName" . }}
       automountServiceAccountToken: {{ .Values.serviceAccount.automountServiceAccountToken }}
+      {{- if .Values.imagePullSecrets }}
+      imagePullSecrets:
+      {{- toYaml .Values.imagePullSecrets | nindent 8 }}
+      {{- end }}
       securityContext:
         seccompProfile:
           type: RuntimeDefault
@@ -36,8 +40,8 @@ spec:
             capabilities:
               drop:
                 - ALL
-          image: "{{ .Values.deployment.image.repository }}:{{ .Values.deployment.image.tag }}"
-          imagePullPolicy: {{ .Values.deployment.image.pullPolicy }}
+          image: "{{ .Values.backend.deployment.image.repository }}:{{ .Values.backend.deployment.image.tag }}"
+          imagePullPolicy: {{ .Values.backend.deployment.image.pullPolicy }}
           ports:
             - name: http
               containerPort: 8080
@@ -56,13 +60,13 @@ spec:
             periodSeconds: 5
             timeoutSeconds: 2
             failureThreshold: 3
-          {{- if .Values.deployment.envFrom }}
+          {{- if .Values.backend.deployment.envFrom }}
           envFrom:
-          {{- toYaml .Values.deployment.envFrom | nindent 12 }}
+          {{- toYaml .Values.backend.deployment.envFrom | nindent 12 }}
           {{- end }}
-          {{- if .Values.deployment.env }}
+          {{- if .Values.backend.deployment.env }}
           env:
-          {{- toYaml .Values.deployment.env | nindent 12 }}
+          {{- toYaml .Values.backend.deployment.env | nindent 12 }}
           {{- end }}
           resources:
-            {{- toYaml .Values.deployment.resources | nindent 12 }}
+            {{- toYaml .Values.backend.deployment.resources | nindent 12 }}

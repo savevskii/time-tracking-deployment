@@ -6,24 +6,24 @@ serviceAccount:
   name: ""
   automountServiceAccountToken: false
 
-deployment:
-  replicaCount: 1
-  image:
-    repository: "ghcr.io/savevskii/time-tracking-app"
-    tag: "main"
-    pullPolicy: IfNotPresent
-  resources:
-    requests:
-      cpu: "250m"
-      memory: "512Mi"
-    limits:
-      memory: "1Gi"
-  envFrom: []
-  env: []
-
-service:
-  type: ClusterIP
-  port: 8080
+backend:
+  deployment:
+    replicaCount: 1
+    image:
+      repository: "ghcr.io/savevskii/time-tracking-app"
+      tag: "main"
+      pullPolicy: IfNotPresent
+    resources:
+      requests:
+        cpu: "250m"
+        memory: "512Mi"
+      limits:
+        memory: "1Gi"
+    envFrom: []
+    env: []
+  service:
+    type: ClusterIP
+    port: 8080
 
 frontend:
   enabled: true
@@ -50,6 +50,8 @@ ingress:
 
 egress:
   enabled: false
+
+imagePullSecrets: []
 
 # Subchart defaults
 postgresql:

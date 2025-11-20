@@ -6,10 +6,10 @@ metadata:
     {{- include "time-tracking-app.labels" . | nindent 4 }}
     app.kubernetes.io/component: backend
 spec:
-  type: {{ .Values.service.type }}
+  type: {{ .Values.backend.service.type }}
   ports:
     - name: http
-      port: {{ .Values.service.port }}
+      port: {{ .Values.backend.service.port }}
       targetPort: 8080
       protocol: TCP
   selector:

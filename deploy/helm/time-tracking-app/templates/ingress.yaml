@@ -39,7 +39,7 @@ spec:
           {{- $resolvedServiceName := "" }}
           {{- if eq $serviceNameKey "backend" }}
             {{- $resolvedServiceName = $backendServiceName }}
-            {{- $servicePort = default $root.Values.service.port $servicePort }}
+            {{- $servicePort = default $root.Values.backend.service.port $servicePort }}
           {{- else if eq $serviceNameKey "frontend" }}
             {{- $resolvedServiceName = $frontendServiceName }}
             {{- $servicePort = default $root.Values.frontend.service.port $servicePort }}
