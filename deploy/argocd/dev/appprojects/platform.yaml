@@ -7,7 +7,8 @@ spec:
   description: Argo CD project for the Time Tracking platform components
   sourceRepos:
     - "https://github.com/savevskii/time-tracking-deployment.git"
-    - "oci://registry-1.docker.io/bitnamicharts"
+    - "oci://registry-1.docker.io/bitnamicharts/keycloak"
+    - "oci://registry-1.docker.io/bitnamicharts/postgresql"
   destinations:
     - namespace: time-tracking-dev
       server: https://kubernetes.default.svc
