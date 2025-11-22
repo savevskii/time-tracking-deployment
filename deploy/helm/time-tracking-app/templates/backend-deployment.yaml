@@ -21,6 +21,10 @@ spec:
         {{- include "time-tracking-app.selectorLabels" . | nindent 8 }}
         app.kubernetes.io/component: backend
     spec:
+      {{- with .Values.backend.deployment.initContainers }}
+      initContainers:
+        {{- tpl (toYaml .) $ | nindent 8 }}
+      {{- end }}
       serviceAccountName: {{ include "time-tracking-app.serviceAccountName" . }}
       automountServiceAccountToken: {{ .Values.serviceAccount.automountServiceAccountToken }}
       {{- if .Values.imagePullSecrets }}

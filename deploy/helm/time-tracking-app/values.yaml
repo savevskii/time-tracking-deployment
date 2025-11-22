@@ -13,6 +13,14 @@ backend:
       repository: "ghcr.io/savevskii/time-tracking-app"
       tag: "main"
       pullPolicy: IfNotPresent
+    initContainers:
+      - name: wait-for-keycloak
+        image: busybox:1.36
+        command:
+          - sh
+          - -c
+          - |
+            until nc -z {{ printf "%s-keycloak.%s.svc.cluster.local" .Release.Name .Release.Namespace }} 80; do echo "Waiting for Keycloak..."; sleep 2; done
     resources:
       requests:
         cpu: "250m"
@@ -55,6 +63,10 @@ imagePullSecrets: []
 
 # Subchart defaults
 postgresql:
+  image:
+    registry: docker.io
+    repository: bitnamilegacy/postgresql
+    tag: 17.6.0-debian-12-r4
   enabled: true
   auth:
     enablePostgresUser: true
@@ -94,6 +106,10 @@ postgresql:
     enabled: false
 
 keycloak:
+  image:
+    registry: docker.io
+    repository: bitnamilegacy/keycloak
+    tag: 26.3.3-debian-12-r0
   enabled: true
   auth:
     adminUser: admin
@@ -133,3 +149,11 @@ keycloak:
     - name: dev-realm
       mountPath: /opt/bitnami/keycloak/data/import
       readOnly: true
+  extraInitContainers:
+    - name: wait-for-db
+      image: busybox:1.36
+      command:
+        - sh
+        - -c
+        - |
+          until nc -z {{ printf "%s-postgresql.%s.svc.cluster.local" .Release.Name .Release.Namespace }} 5432; do echo "Waiting for PostgreSQL..."; sleep 2; done
