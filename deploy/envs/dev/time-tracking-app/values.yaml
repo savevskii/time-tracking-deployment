@@ -9,29 +9,26 @@ backend:
       - name: SPRING_DATASOURCE_PASSWORD
         value: "timetracking123"
       - name: SPRING_SECURITY_OAUTH2_RESOURCESERVER_JWT_ISSUER_URI
-        value: "https://keycloak.localtest.me/realms/dev"
+        value: "https://keycloak-dev.localtest.me/realms/dev"
       - name: SPRING_SECURITY_OAUTH2_RESOURCESERVER_JWT_JWK_SET_URI
         value: "http://time-tracking-keycloak.time-tracking-dev.svc.cluster.local/realms/dev/protocol/openid-connect/certs"
-
 frontend:
   env:
     - name: KEYCLOAK_URL
-      value: "https://keycloak.localtest.me/"
+      value: "https://keycloak-dev.localtest.me/"
     - name: KEYCLOAK_REALM
       value: "dev"
     - name: KEYCLOAK_CLIENT_ID
       value: "time-tracking-app"
     - name: API_BASE_URL
-      value: "https://time-tracking.localtest.me/"
-
+      value: "https://time-tracking-dev.localtest.me/"
 imagePullSecrets:
   - name: ghcr-creds
-
 ingress:
   enabled: true
   className: "nginx"
   hosts:
-    - host: time-tracking.localtest.me
+    - host: time-tracking-dev.localtest.me
       paths:
         - path: /
           pathType: Prefix
@@ -43,15 +40,14 @@ ingress:
             name: backend
   tls:
     - hosts:
-        - time-tracking.localtest.me
+        - time-tracking-dev.localtest.me
       secretName: time-tracking-local-tls
-
 keycloak:
   ingress:
     tls: true
     extraTls:
       - hosts:
-          - keycloak.localtest.me
+          - keycloak-dev.localtest.me
         secretName: keycloak-local-tls
   externalDatabase:
     host: time-tracking-postgresql.time-tracking-dev.svc.cluster.local
