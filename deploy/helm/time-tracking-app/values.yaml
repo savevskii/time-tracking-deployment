@@ -11,7 +11,7 @@ backend:
     replicaCount: 1
     image:
       repository: "ghcr.io/savevskii/time-tracking-app"
-      tag: "main"
+      tag: "latest"
       pullPolicy: IfNotPresent
     initContainers:
       - name: wait-for-keycloak

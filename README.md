@@ -31,6 +31,7 @@ Infrastructure repository for the Time Tracking diploma project. The repo follow
    ```
 4. **Create secret so the cluster can pull images from GitHub Container Registry**
    ```bash
+   kubectl create namespace time-tracking-dev
    kubectl create secret docker-registry ghcr-creds \
      --docker-server=ghcr.io \
      --docker-username=savevskii \
@@ -70,9 +71,7 @@ Infrastructure repository for the Time Tracking diploma project. The repo follow
    Update the repo URL below with your Git remote (HTTP(S) or SSH):
    ```bash
    argocd repo add https://github.com/savevskii/time-tracking-deployment.git \
-     --username savevskii \
-     --password <your-github-token> \
-     --name time-tracking-app-repo
+     --name time-tracking-deployment-repo
    ```
 10. **(Optional) Create local HTTPS certificates and TLS secrets**  
     If you want to access the application and Keycloak over HTTPS locally, create self-signed certs (you can also use `mkcert`). Store them as TLS secrets referenced by the dev Helm values file before syncing the application.
@@ -84,7 +83,8 @@ Infrastructure repository for the Time Tracking diploma project. The repo follow
       -out time-tracking-local.crt \
       -subj "/CN=time-tracking.localtest.me" \
       -addext "subjectAltName = DNS:time-tracking.localtest.me"
-
+    ```
+    ```bash
     kubectl -n time-tracking-dev create secret tls time-tracking-local-tls \
       --cert=time-tracking-local.crt \
       --key=time-tracking-local.key
@@ -97,7 +97,8 @@ Infrastructure repository for the Time Tracking diploma project. The repo follow
       -out keycloak-local.crt \
       -subj "/CN=keycloak.localtest.me" \
       -addext "subjectAltName = DNS:keycloak.localtest.me"
-
+    ```
+    ```bash
     kubectl -n time-tracking-dev create secret tls keycloak-local-tls \
       --cert=keycloak-local.crt \
       --key=keycloak-local.key
