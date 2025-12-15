@@ -16,8 +16,6 @@ backend:
         value: "https://keycloak-dev.localtest.me/realms/dev"
       - name: SPRING_SECURITY_OAUTH2_RESOURCESERVER_JWT_JWK_SET_URI
         value: "http://time-tracking-keycloak.time-tracking-dev.svc.cluster.local/realms/dev/protocol/openid-connect/certs"
-  image:
-    tag: sha-4b469c5
 frontend:
   image:
     tag: "latest"
