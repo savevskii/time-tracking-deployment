@@ -1,6 +1,5 @@
 imagePullSecrets:
   - name: ghcr-creds
-
 backend:
   deployment:
     replicaCount: 1
@@ -17,7 +16,8 @@ backend:
         value: "https://keycloak-dev.localtest.me/realms/dev"
       - name: SPRING_SECURITY_OAUTH2_RESOURCESERVER_JWT_JWK_SET_URI
         value: "http://time-tracking-keycloak.time-tracking-dev.svc.cluster.local/realms/dev/protocol/openid-connect/certs"
-
+  image:
+    tag: sha-4b469c5
 frontend:
   image:
     tag: "latest"
@@ -30,7 +30,6 @@ frontend:
       value: "time-tracking-app"
     - name: API_BASE_URL
       value: "https://time-tracking-dev.localtest.me/"
-
 ingress:
   enabled: true
   className: "nginx"
@@ -49,7 +48,6 @@ ingress:
     - hosts:
         - time-tracking-dev.localtest.me
       secretName: time-tracking-local-tls
-
 keycloak:
   ingress:
     tls: true
