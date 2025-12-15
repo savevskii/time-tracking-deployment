@@ -4,7 +4,7 @@ backend:
   deployment:
     replicaCount: 1
     image:
-      tag: "sha-70929ae"
+      tag: "sha-5fc8235"
     env:
       - name: SPRING_DATASOURCE_URL
         value: "jdbc:postgresql://time-tracking-postgresql.time-tracking-dev.svc.cluster.local:5432/timetracking"
