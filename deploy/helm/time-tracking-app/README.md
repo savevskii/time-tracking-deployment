@@ -10,13 +10,13 @@ Refer to the repository root `README.md` for:
 - Helm upgrade/install example
 
 ### Values
-Override values per environment under `deploy/envs/<env>/time-tracking-app/values.yaml`.
+Override values per environment under `deploy/environments/<env>/values.yaml`.
 
 To perform a manual install/upgrade:
 ```bash
 helm upgrade --install time-tracking deploy/helm/time-tracking-app \
   -n time-tracking-dev \
-  -f deploy/envs/dev/time-tracking-app/values.yaml
+  -f deploy/environments/dev/values.yaml
 ```
 
 ### Notes

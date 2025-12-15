@@ -31,7 +31,7 @@
 
 ## Repository Structure
 - `deploy/helm/` — Helm charts (e.g., `time-tracking-app` bundling backend, PostgreSQL, Keycloak).
-- `deploy/envs/<env>/<component>/values.yaml` — Environment-specific overrides consumed by Argo CD Applications.
+- `deploy/environments/<env>/values.yaml` — Environment-specific overrides consumed by Argo CD Applications.
 - `deploy/argocd/` — AppProjects, Applications, and ApplicationSets driving GitOps sync (ApplicationSet for `time-tracking`).
 - `deploy/infra/` — Ancillary cluster assets such as kind cluster config and the Argo CD ingress manifest.
 

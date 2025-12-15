@@ -5,7 +5,7 @@ Infrastructure repository for the Time Tracking diploma project. The repo follow
 ## Repository Layout
 
 - `deploy/helm/` – Helm charts for the platform (e.g., backend app, Keycloak, PostgreSQL)
-- `deploy/envs/` – Environment-specific overrides (`deploy/envs/<env>/<component>/values.yaml`)
+- `deploy/environments/` – Environment-specific overrides (`deploy/environments/<env>/values.yaml`)
 - `deploy/argocd/` – Argo CD AppProjects, Applications, and ApplicationSets
 - `deploy/infra/` – Cluster bootstrap assets (e.g., local `kind` definition)
 
@@ -108,7 +108,7 @@ Infrastructure repository for the Time Tracking diploma project. The repo follow
     ```bash
     helm upgrade --install time-tracking deploy/helm/time-tracking-app \
       -n time-tracking-dev \
-      -f deploy/envs/dev/time-tracking-app/values.yaml
+      -f deploy/environments/dev/values.yaml
     ```
     Trust the certs in your OS/browser if prompted.
 11. **Apply GitOps manifests**
@@ -116,7 +116,7 @@ Infrastructure repository for the Time Tracking diploma project. The repo follow
     kubectl apply -f deploy/argocd/dev/appprojects/platform.yaml
     kubectl apply -f deploy/argocd/dev/bootstrap.yaml
     ```
-    The ApplicationSet will create the `time-tracking` release in the `time-tracking-dev` namespace using the values from `deploy/envs/dev/time-tracking-app/values.yaml`.
+    The ApplicationSet will create the `time-tracking` release in the `time-tracking-dev` namespace using the values from `deploy/environments/dev/values.yaml`.
 
 ## Next Steps
 

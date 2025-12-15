@@ -14,7 +14,7 @@ spec:
     helm:
       valueFiles:
         - values.yaml
-        - ../../envs/dev/time-tracking-app/values.yaml
+        - ../../environments/dev/values.yaml
   destination:
     server: https://kubernetes.default.svc
     namespace: time-tracking-dev
