@@ -49,6 +49,7 @@ ingress:
 keycloak:
   ingress:
     tls: true
+    hostname: keycloak-dev.localtest.me
     extraTls:
       - hosts:
           - keycloak-dev.localtest.me
