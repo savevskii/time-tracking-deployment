@@ -18,7 +18,7 @@ backend:
         value: "http://time-tracking-keycloak.time-tracking-dev.svc.cluster.local/realms/dev/protocol/openid-connect/certs"
 frontend:
   image:
-    tag: "sha-581e8b2"
+    tag: "sha-ad099db"
   env:
     - name: KEYCLOAK_URL
       value: "https://keycloak-dev.localtest.me/"
